@@ -533,7 +533,7 @@ def to_excel(user_inputs_df,df1, df2):
 # Streamlit Application Layout
 st.image('logo.png', width=600)
 st.markdown(
-    "<h1 style='text-align: center; color: grey;'>Final Mile Rate Maker RM1205</h1>",
+    "<h1 style='text-align: center; color: grey;'>Final Mile Rate Maker</h1>",
     unsafe_allow_html=True
 )
 # service_type
