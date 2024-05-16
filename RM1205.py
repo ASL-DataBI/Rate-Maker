@@ -5,7 +5,7 @@ import xlsxwriter
 from xlsxwriter.utility import xl_col_to_name
 import datetime
 
-st.set_page_config(page_title="Rate Maker May 16th RM1205 ")
+st.set_page_config(page_title="Rate Maker")
 
 # Fixed costs and other constants
 WORKING_DAYS_PER_YEAR = 252
