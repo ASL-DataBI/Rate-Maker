@@ -60,7 +60,7 @@ terminal_names = sorted(name_to_zone_number.keys())
 # First mile zone details
 firstmile_zone_details = {
     '50': {
-        'pickup_cost': 450.0000,
+        'pickup_cost': 350.0000,
         'gaylords_per_truck': 18.0000,
         'pcs_gaylord': {
             '4lbs': 125.0000,
