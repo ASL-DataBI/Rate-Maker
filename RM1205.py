@@ -700,11 +700,11 @@ if 'costs_df' in st.session_state and st.session_state['costs_df'] is not None a
     #st.write(f"Date and Time of Generation: {generation_datetime}")
 
     # Display R1 costs
-    st.write("R1 Costs:")
+    st.write("R1 Sell Rate:")
     st.dataframe(r1_df.style.format("${:.2f}"))
 
     # Display R2 costs with renamed columns
-    st.write("R2 Costs:")
+    st.write("R2 Sell Rate:")
     st.dataframe(r2_df.style.format("${:.2f}"))
 
     if st.button('Prepare R1 & R2 Ratesheet'):
