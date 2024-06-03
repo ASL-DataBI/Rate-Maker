@@ -8,7 +8,7 @@ import datetime
 st.set_page_config(page_title="Rate Maker Custom Margin")
 
 # Fixed costs and other constants
-WORKING_DAYS_PER_YEAR = 252
+WORKING_DAYS_PER_YEAR = 252.0
 MANAGEMENT_COST_PERCENTAGE = 0.0650
 FACILITIES_COST_PERCENTAGE = 0.0645
 ADMIN_COST_PERCENTAGE = 0.1475
@@ -17,27 +17,27 @@ ADMIN_COST_PERCENTAGE = 0.1475
 
 if 'custom_margins' not in st.session_state:
     st.session_state['custom_margins'] = {
-        (1, 10): 5,
-        (11, 25): 7,
-        (26, 75): 10,
-        (76, 250): 15
+        (1, 10): 5.0,
+        (11, 25): 7.0,
+        (26, 75): 10.0,
+        (76, 250): 15.0
     }
 # Constants for daily rates based on weight categories
 WEIGHT_RATES = {
     "End to End": {
-        "0 - 10": 5,
-        "11 - 24": 10,
-        ">=25": 15
+        "0 - 10": 5.0,
+        "11 - 24": 10.0,
+        ">=25": 15.0
     },
     "End to End without Pickup": {
         "0 - 10": 4.5,
-        "11 - 24": 9,
+        "11 - 24": 9.0,
         ">=25": 17.5
     },
     "Final Mile Only": {
-        "0 - 10": 4,
-        "11 - 24": 8,
-        ">=25": 19
+        "0 - 10": 4.0,
+        "11 - 24": 8.0,
+        ">=25": 19.0
     }
 }
 # Terminals and their zone details
@@ -598,12 +598,12 @@ with st.form("input_form"):
 
 # Custom Margin Form
 with st.form("custom_margin_form"):
-    st.markdown('<span style="font-size: 20px; font-weight: bold; font-style: italic;">Enter custom margin by Weight bracket(%)</span>', unsafe_allow_html=True)
+    st.markdown('<span style="font-size: 20px; font-weight: bold; font-style: italic;">Enter margin by Weight bracket below(%)</span>', unsafe_allow_html=True)
     #st.write("Enter custom margin by Weight bracket (%):")
     for bracket, default_margin in st.session_state.get('custom_margins', {}).items():
         new_margin = st.number_input(
             f"Margin for weights {bracket[0]}-{bracket[1]} lbs:",
-            value=default_margin,
+            value=float(default_margin),
             min_value=0.0,
             max_value=100.0,
             step=0.5,
