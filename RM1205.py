@@ -604,8 +604,8 @@ with st.form("custom_margin_form"):
         new_margin = st.number_input(
             f"Margin for weights {bracket[0]}-{bracket[1]} lbs:",
             value=default_margin,
-            min_value=0,
-            max_value=100,
+            min_value=0.0,
+            max_value=100.0,
             step=0.5,
             key=f'margin_{bracket[0]}_{bracket[1]}'
         )
