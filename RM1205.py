@@ -606,7 +606,7 @@ with st.form("custom_margin_form"):
             value=default_margin,
             min_value=0,
             max_value=100,
-            step=1,
+            step=0.5,
             key=f'margin_{bracket[0]}_{bracket[1]}'
         )
         st.session_state.setdefault('custom_margins', {})[bracket] = new_margin  # Using setdefault() to create key if not present
