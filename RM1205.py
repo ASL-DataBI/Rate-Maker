@@ -5,7 +5,7 @@ import xlsxwriter
 from xlsxwriter.utility import xl_col_to_name
 import datetime
 
-st.set_page_config(page_title="Rate Maker")
+st.set_page_config(page_title="Rate Maker Custom Margin")
 
 # Fixed costs and other constants
 WORKING_DAYS_PER_YEAR = 252
@@ -547,24 +547,26 @@ bracket_descriptions = ["1-10 lbs", "11-25 lbs", "26-75 lbs", "76-250 lbs"]
 
 # Streamlit form#1 for user input
 with st.form("input_form"):
-    st.write("Enter Opportunity Details")
+    st.markdown('<span style="font-size: 20px; font-weight: bold; font-style: italic;">Shipment Profiling : Enter Opportunity Details</span>', unsafe_allow_html=True)
+    #st.markdown("**_Shipment Profiling : Enter Opportunity Details_**", unsafe_allow_html=True)
+    #st.write("Shipment Profiling : Enter Opportunity Details")
     opportunity_name = st.text_input("Opportunity Name", key='opportunity_name')
     quote_prepared_by = st.text_input("Quote Prepared By", key='quote_prepared_by')
     freight_pickup_service = st.selectbox("Does the freight need to be picked up from the customer location to the induction site?", ['Yes', 'No'], key='freight_pickup_service')
     sort_initial_freight = st.selectbox("Is sorting of initial mixed freight at the induction site required?", ['Yes', 'No'], key='sort_initial_freight')
     pick_up_location = st.selectbox("Pickup Zone", options=terminal_names, key='pick_up_location')
-    pick_up_schedule = st.text_input("Pickup Schedule", key='pick_up_schedule')
-    pick_up_timings = st.text_input("Pickup Timings", key='pick_up_timings')
+    #pick_up_schedule = st.text_input("Pickup Schedule", key='pick_up_schedule')
+    #pick_up_timings = st.text_input("Pickup Timings", key='pick_up_timings')
     average_shipment_weight = st.selectbox("Average Shipment Weight (In Pounds)", ["0 - 10", "11 - 24", ">=25"], key='average_shipment_weight')
-    use_rate_shopping_system = st.radio("Do you use a rate shopping system?", ["Yes", "No"], key='rate_shopping_system')
+    #use_rate_shopping_system = st.radio("Do you use a rate shopping system?", ["Yes", "No"], key='rate_shopping_system')
     shipping_sla = st.selectbox("Choose Shipping SLA", ["Next Day", "Same Day", "2-days"], key='shipping_sla')
     service_type_required = st.radio("Choose Service Type Required", ["Non-dedicated", "Dedicated"], key='service_type_required')
     avg_shipments_per_day = st.number_input("Average Shipments Per Day", min_value=1, key='avg_shipments_per_day')
     avg_pieces_per_shipment = st.number_input("Average Pieces Per Shipment", min_value=1, key='avg_pieces_per_shipment')
-    submit = st.form_submit_button("Submit")
+    submit = st.form_submit_button("Calculate Est. Annual Revenue")
 
     if submit:
-        if not all([opportunity_name, quote_prepared_by, pick_up_schedule, pick_up_timings, avg_shipments_per_day, avg_pieces_per_shipment]):
+        if not all([opportunity_name, quote_prepared_by, avg_shipments_per_day, avg_pieces_per_shipment]):
             st.error("All fields are required.")
             st.stop()
         if shipping_sla == 'Same Day' and service_type_required == 'Dedicated':
@@ -596,7 +598,8 @@ with st.form("input_form"):
 
 # Custom Margin Form
 with st.form("custom_margin_form"):
-    st.write("Set Custom Margins for Weight Brackets (%):")
+    st.markdown('<span style="font-size: 20px; font-weight: bold; font-style: italic;">Based on Est. Annual Revenue enter margin below(%)</span>', unsafe_allow_html=True)
+    #st.write("Enter custom margin by Weight bracket (%):")
     for bracket, default_margin in st.session_state.get('custom_margins', {}).items():
         new_margin = st.number_input(
             f"Margin for weights {bracket[0]}-{bracket[1]} lbs:",
@@ -608,14 +611,14 @@ with st.form("custom_margin_form"):
         )
         st.session_state.setdefault('custom_margins', {})[bracket] = new_margin  # Using setdefault() to create key if not present
 
-    submit_custom_margins = st.form_submit_button("Submit Margins")
+    submit_custom_margins = st.form_submit_button("Generate Rate Sheet")
     if submit_custom_margins:
         st.success("Custom margins updated successfully!")
 
          # Add service level, date, and time of generation
         service_level = st.session_state.get('service_type', 'N/A')
         generation_date_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        st.write(f"Calculating costs for service level: {service_level}")
+        st.write(f"Calculating Rate Sheet for service level: {service_level}")
         st.write(f"Date & Time of Generation: {generation_date_time}")
 
         # Calculate Costs
@@ -657,10 +660,10 @@ user_inputs_dict = {
     'Freight Pickup Service': [freight_pickup_service],
     'Sort Initial Freight': [sort_initial_freight],
     'Pickup Location': [pick_up_location],
-    'Pickup Schedule': [pick_up_schedule],
-    'Pickup Timings': [pick_up_timings],
+    #'Pickup Schedule': [pick_up_schedule],
+    #'Pickup Timings': [pick_up_timings],
     'Average Shipment Weight': [average_shipment_weight],
-    'Rate Shopping System': [use_rate_shopping_system],
+    #'Rate Shopping System': [use_rate_shopping_system],
     'Shipping SLA': [shipping_sla],
     'Service Type Required': [service_type_required],
     'Average Shipments Per Day': [avg_shipments_per_day],
@@ -669,9 +672,6 @@ user_inputs_dict = {
 
 # Convert the dictionary to a DataFrame
 user_inputs_df = pd.DataFrame(user_inputs_dict)
-
-# Display the DataFrame
-#user_inputs_df
 
 # Display calculated costs
 if 'costs_df' in st.session_state and st.session_state['costs_df'] is not None and not st.session_state['costs_df'].empty:
@@ -712,5 +712,5 @@ if 'costs_df' in st.session_state and st.session_state['costs_df'] is not None a
         file_name = f"{opportunity_name}_{quote_prepared_by}_ratesheet_{generation_datetime}.xlsx"
         st.download_button(label="Download Ratesheets", data=excel_data, file_name=file_name, mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 else:
-    st.write("Please calculate costs by submitting the form above.")
+    st.write("")
     st.session_state['download_ready'] = None 
