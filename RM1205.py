@@ -598,7 +598,7 @@ with st.form("input_form"):
 
 # Custom Margin Form
 with st.form("custom_margin_form"):
-    st.markdown('<span style="font-size: 20px; font-weight: bold; font-style: italic;">Based on Est. Annual Revenue enter margin below(%)</span>', unsafe_allow_html=True)
+    st.markdown('<span style="font-size: 20px; font-weight: bold; font-style: italic;">Enter custom margin by Weight bracket(%)</span>', unsafe_allow_html=True)
     #st.write("Enter custom margin by Weight bracket (%):")
     for bracket, default_margin in st.session_state.get('custom_margins', {}).items():
         new_margin = st.number_input(
